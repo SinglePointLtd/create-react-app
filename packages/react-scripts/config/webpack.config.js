@@ -682,9 +682,8 @@ module.exports = function(webpackEnv) {
       isEnvProduction &&
         new WorkboxWebpackPlugin.GenerateSW({
           clientsClaim: true,
-          exclude: [/\.map$/, /asset-manifest\.json$/],
+          exclude: [/\.map$/, /asset-manifest\.json$/, /index.html/],
           importWorkboxFrom: 'cdn',
-          navigateFallback: publicUrl + '/index.html',
           navigateFallbackBlacklist: [
             // Exclude URLs starting with /_, as they're likely an API call
             new RegExp('^/_'),
