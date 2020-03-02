@@ -140,3 +140,23 @@ if (
 // @remove-on-eject-end
 
 module.exports.moduleFileExtensions = moduleFileExtensions;
+
+// custom Lerna to find all paths in Lerna repo
+module.exports.lernaRoot = path
+  .resolve(module.exports.appPath, '../')
+  .endsWith('packages')
+  ? path.resolve(module.exports.appPath, '../../')
+  : module.exports.appPath
+
+module.exports.appLernaModules = []
+module.exports.allLernaModules = fs.readdirSync(
+  path.join(module.exports.lernaRoot, 'packages')
+)
+
+fs.readdirSync(module.exports.appNodeModules).forEach(folderName => {
+  if (folderName === 'react-scripts') return
+  const fullName = path.join(module.exports.appNodeModules, folderName)
+  if (fs.lstatSync(fullName).isSymbolicLink()) {
+    module.exports.appLernaModules.push(fs.realpathSync(fullName))
+  }
+})
